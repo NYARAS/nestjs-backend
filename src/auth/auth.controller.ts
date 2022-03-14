@@ -4,7 +4,6 @@ import { RegisterDto } from './dtos/register.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request, response } from 'express';
-import { PassThrough } from 'stream';
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
