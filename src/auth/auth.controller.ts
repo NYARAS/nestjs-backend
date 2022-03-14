@@ -105,4 +105,29 @@ export class AuthController {
 
        return this.userService.findOne({id});
    }
+
+   @UseGuards(AuthGuard)
+   @Put('admin/users/password')
+   async updatePassword(
+       @Req() request: Request,
+       @Body('password') password: string,
+       @Body('password_confirm') password_confirm: string,
+   )
+   {
+    if(password !== password_confirm) {
+        throw new BadRequestException("Passwords do not match!")
+    }
+
+       const cookie = request.cookies['jwt'];
+
+       const{id} = await this.jwtService.verifyAsync(cookie);
+
+       await this.userService.update(
+        id,
+       {
+           password: await bcrypt.hash(password, 12)
+       })
+
+       return this.userService.findOne({id});
+   }
 }
