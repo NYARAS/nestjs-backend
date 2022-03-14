@@ -31,4 +31,31 @@ export class AuthController {
             is_ambassador: false
         })
     }
+
+   @Post('admin/login')
+   async login(
+       @Body('email') email: string,
+       @Body('password') password: string,
+       @Res({passthrough: true}) response: Response
+   ){
+       const user = await this.userService.findOne({email})
+
+       if(!user) {
+           throw new NotFoundException('User not found');
+       }
+
+       if(!await bcrypt.compare(password, user.password)) {
+           throw new BadRequestException('Invalid credentials');
+       }
+
+       const jwt = await this.jwtService.signAsync({
+           id: user.id
+       });
+
+       response.cookie('jwt', jwt, {httpOnly: true})
+
+       return {
+           message : 'success'
+       } ;
+   }
 }
