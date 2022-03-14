@@ -58,4 +58,24 @@ export class AuthController {
            message : 'success'
        } ;
    }
+
+   @Get('admin/user')
+   async user(@Req() request: Request){
+       const cookie = request.cookies['jwt']
+
+       const {id} = await this.jwtService.verifyAsync(cookie);
+
+       const user = await this.userService.findOne({id});
+
+       return user;
+   }
+
+   @Post('admin/logout')
+   async logout(@Res({passthrough: true}) response: Response) {
+       response.clearCookie('jwt');
+
+       return {
+           message: 'success'
+       }
+   }
 }
