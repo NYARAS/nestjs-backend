@@ -1,12 +1,10 @@
 import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Post, Put, Req, Res, UseGuards, UseInterceptors } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { RegisterDto } from './dtos/register.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request, response } from 'express';
 import { AuthGuard } from './auth.guard';
-import { request } from 'http';
-import { first } from 'rxjs';
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
