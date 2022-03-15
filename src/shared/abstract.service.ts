@@ -20,4 +20,8 @@ export abstract class AbstractService {
         async find(options) {
             return this.repository.find(options);
         }
+
+        async delete(id: number) {
+            return this.repository.delete(id);
+        }
 }
