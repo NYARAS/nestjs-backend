@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './order';
 import { OrderItem } from './order-item';
+import { OrderItemsService } from './order-items.service';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 
@@ -11,6 +12,6 @@ import { OrderService } from './order.service';
     ],
 
     controllers: [OrderController],
-    providers: [OrderService],
+    providers: [OrderService, OrderItemsService],
 })
 export class OrderModule {}
