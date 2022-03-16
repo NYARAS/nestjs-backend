@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { ProductCreateDto } from './dtos/product-create.dto';
 import { ProductService } from './product.service';
 
 @Controller()
@@ -15,7 +16,7 @@ export class ProductController {
     }
 
     @Post('admin/products')
-    async create(@Body() body: ProductService) {
+    async create(@Body() body: ProductCreateDto) {
         return this.productService.save(body);
     }
 
@@ -27,7 +28,7 @@ export class ProductController {
      @Put('admin/products/:id')
      async update(
          @Param('id') id: number,
-         @Body() body: ProductService,
+         @Body() body: ProductCreateDto,
          ){
              // Update the product
              await this.productService.update(id, body);
