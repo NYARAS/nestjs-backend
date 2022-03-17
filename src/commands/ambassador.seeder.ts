@@ -3,7 +3,7 @@ import { AppModule } from "../app.module"
 import { UserService } from "../user/user.service";
 import * as bcrypt from 'bcrypt';
 
-const { faker } = require('@faker-js/faker');
+const faker = require('faker');
 
 (async () => {
     const app = await NestFactory.createApplicationContext(AppModule);

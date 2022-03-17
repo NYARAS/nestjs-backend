@@ -1,11 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ProductCreateDto } from './dtos/product-create.dto';
 import { ProductService } from './product.service';
 
 @Controller()
 export class ProductController {
     constructor(
-        private readonly productService: ProductService
+        private readonly productService: ProductService,
+        private eventEmitter: EventEmitter2
     ){
 
     }
@@ -17,7 +19,13 @@ export class ProductController {
 
     @Post('admin/products')
     async create(@Body() body: ProductCreateDto) {
-        return this.productService.save(body);
+       const product = await this.productService.save(body);
+       await this.productService.findOne(product.id);
+    //    this.eventEmitter.emit('product.created', product);
+    //    this.eventEmitter.emit('product.created');
+
+       return product
+
     }
 
     @Get('admin/products/:id')
@@ -34,7 +42,10 @@ export class ProductController {
              await this.productService.update(id, body);
 
              // Find the just updated product
-             return this.productService.findOne({id});
+             const product = await this.productService.findOne({id});
+            //  this.eventEmitter.emit('product.created', product);
+
+            return product
       }
 
 

@@ -3,7 +3,7 @@ import { UserService } from '../user/user.service';
 import { RegisterDto } from './dtos/register.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { Response, Request, response } from 'express';
+import { Response, Request } from 'express';
 import { AuthGuard } from './auth.guard';
 
 @Controller()
@@ -30,6 +30,7 @@ export class AuthController {
             password: hashed,
             is_ambassador: false
         })
+
     }
 
    @Post('admin/login')
