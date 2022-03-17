@@ -2,6 +2,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SharedModule } from '../shared/shared.module';
 import { ProductListener } from './listeners/order.listener';
 import { Product } from './product';
 import { ProductController } from './product.controller';
@@ -10,6 +11,7 @@ import { ProductService } from './product.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
+    SharedModule,
 
     MailerModule.forRoot({
       transport: {

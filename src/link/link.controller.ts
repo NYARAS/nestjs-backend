@@ -1,4 +1,5 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard';
 import { LinkService } from './link.service';
 
 @Controller()
@@ -9,10 +10,12 @@ export class LinkController {
 
     }
 
+    @UseGuards(AuthGuard)
     @Get('admin/users/:id/links')
     async all(@Param('id') id: number) {
         return this.linkService.find({
-            user: id
+            user: id,
+            relations: ['orders']
         });
     }
 }

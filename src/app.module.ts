@@ -8,6 +8,7 @@ import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { LinkModule } from './link/link.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     AuthModule,
     ProductModule,
     OrderModule,
-    LinkModule
+    LinkModule,
+    SharedModule
   ],
   controllers: [AppController],
   providers: [AppService],
