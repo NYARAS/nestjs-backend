@@ -16,7 +16,7 @@ import * as redisStore from 'cache-manager-redis-store';
               }
           )
     ],
-    exports: [JwtModule]
+    exports: [JwtModule, CacheModule]
 })
 export class SharedModule {
 }
