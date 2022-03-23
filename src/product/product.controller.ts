@@ -24,7 +24,8 @@ export class ProductController {
     @Post('admin/products')
     async create(@Body() body: ProductCreateDto) {
        const product = await this.productService.save(body);
-       await this.productService.findOne(product.id);
+       this.eventEmitter.emit('product_updated');
+       return product;
     //    this.eventEmitter.emit('product.created', product);
     //    this.eventEmitter.emit('product.created');
 
@@ -47,8 +48,7 @@ export class ProductController {
              // Update the product
              await this.productService.update(id, body);
 
-             await this.cacheManager.del('products_frontend');
-             await this.cacheManager.del('products_backend');
+             this.eventEmitter.emit('product_updated');
 
              // Find the just updated product
              const product = await this.productService.findOne({id});
@@ -63,7 +63,9 @@ export class ProductController {
      async delete(
          @Param('id') id: number,
          ){
-             return this.productService.delete(id);
+             const response = await this.productService.delete(id);
+             this.eventEmitter.emit('product_updated');
+             return response
       }
 
       @CacheKey('products_frontend')
