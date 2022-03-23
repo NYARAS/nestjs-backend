@@ -47,6 +47,9 @@ export class ProductController {
              // Update the product
              await this.productService.update(id, body);
 
+             await this.cacheManager.del('products_frontend');
+             await this.cacheManager.del('products_backend');
+
              // Find the just updated product
              const product = await this.productService.findOne({id});
             //  this.eventEmitter.emit('product.created', product);
@@ -63,7 +66,7 @@ export class ProductController {
              return this.productService.delete(id);
       }
 
-      @CacheKey('product_frontend')
+      @CacheKey('products_frontend')
       @CacheTTL(30 * 60)
       @UseInterceptors(CacheInterceptor)
       @Get('ambassador/products/frontend')
