@@ -1,9 +1,11 @@
-import { Body, CacheInterceptor, CacheKey, CacheTTL, CACHE_MANAGER, Controller, Delete, Get, Inject, Param, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, CacheInterceptor, CacheKey, CacheTTL, CACHE_MANAGER, Controller, Delete, Get, Inject, Param, Post, Put, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AuthGuard } from '../auth/auth.guard';
 import { ProductCreateDto } from './dtos/product-create.dto';
 import { ProductService } from './product.service';
 import { Cache } from 'cache-manager';
+import { Request } from 'express';
+import { Product } from './product';
 @Controller()
 export class ProductController {
     constructor(
@@ -77,9 +79,11 @@ export class ProductController {
       }
 
       @Get('ambassador/products/backend')
-     async backend() {
+     async backend(
+         @Req() request: Request
+     ) {
 
-        let products = await this.cacheManager.get('products_backend')
+        let products = await this.cacheManager.get<Product[]>('products_backend');
 
         if (!products) {
             products = await this.productService.find();
@@ -88,6 +92,14 @@ export class ProductController {
                 ttl: 1080
             })
         }
+
+        if (request.query.s) {
+            const s = request.query.s.toString().toLowerCase();
+            products = products.filter(p => p.title.toLowerCase().indexOf(s) >= 0 ||
+             p.description.toLowerCase().indexOf(s) >= 0
+            )
+        }
+
 
         return products
     }
