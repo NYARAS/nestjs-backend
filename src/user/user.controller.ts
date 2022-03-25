@@ -1,13 +1,17 @@
-import { ClassSerializerInterceptor, Controller, Get, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Res, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
-import { User } from './user';
 import { UserService } from './user.service';
+import {Response} from "express";
+import { RedisService } from '../shared/redis.service';
 
 @UseGuards(AuthGuard)
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
-    constructor(private readonly userService: UserService){
+    constructor(
+        private readonly userService: UserService,
+        private redisService: RedisService,
+        ){
 
     }
 
@@ -19,17 +23,12 @@ export class UserController {
     }
 
     @Get('ambassadors/rankings')
-    async rankings() {
-        const ambassadors: User[] = await this.userService.find({
-            is_ambassador: true,
-            relations: ['orders', 'orders.order_items']
+    async rankings(
+        @Res() response: Response
+    ) {
+        const client = this.redisService.getClient();
+        client.zrevrangebyscore('rankings', '+inf', '-inf', 'withscores', (err, result) => {
+        response.send(result)
         });
-
-        return ambassadors.map(ambassador => {
-            return {
-                name: ambassador.name,
-                revenue: ambassador.revenue
-            }
-        })
     }
 }

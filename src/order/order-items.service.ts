@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AbstractService } from 'src/shared/abstract.service';
+import { AbstractService } from '../shared/abstract.service';
 import { Repository } from 'typeorm';
-import { Order } from './order';
 import { OrderItem } from './order-item';
 
 @Injectable()
