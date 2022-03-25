@@ -113,7 +113,7 @@ export class ProductController {
         }
 
         const page: number = parseInt(request.query.page as any) || 1;
-        const perPage = 2;
+        const perPage = 9;
         const total = products.length;
 
        const data = products.slice((page - 1) * perPage, page * perPage)
